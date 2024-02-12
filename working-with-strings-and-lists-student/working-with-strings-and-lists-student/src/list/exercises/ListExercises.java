@@ -36,7 +36,8 @@ public class ListExercises {
 		List<String> words = new ArrayList<>();
 		String word = "";
 
-		if (s.isEmpty()) {
+		if (s.length() == 0) {
+			words.add("");
 			return words;
 		}
 
