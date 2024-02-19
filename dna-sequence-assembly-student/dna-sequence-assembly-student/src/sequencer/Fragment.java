@@ -5,7 +5,7 @@
 package sequencer;
 
 public class Fragment {
-
+	private String nucleotides;
 	/**
 	 * Creates a new Fragment based upon a String representing a sequence of
 	 * nucleotides, containing only the uppercase characters G, C, A and T.
@@ -15,6 +15,14 @@ public class Fragment {
 	 *                                  nucleotides
 	 */
 	public Fragment(String nucleotides) throws IllegalArgumentException {
+		this.nucleotides = nucleotides;
+
+		// checking for valid chars
+		for (char c : nucleotides.toCharArray()) {
+            if (c != 'G' && c != 'C' && c != 'A' && c != 'T') {
+                throw new IllegalArgumentException("Invalid nucleotide character: " + c);
+            }
+        }
 	}
 
 	/**
@@ -23,7 +31,7 @@ public class Fragment {
 	 * @return the length of this fragment
 	 */
 	public int length() {
-		return 0;
+		return nucleotides.length();
 	}
 
 	/**
@@ -34,7 +42,7 @@ public class Fragment {
 	 */
 	@Override
 	public String toString() {
-		return null;
+		return nucleotides;
 	}
 
 	/**
@@ -43,20 +51,14 @@ public class Fragment {
 	 */
 	@Override
 	public boolean equals(Object o) {
-		if (o == null) {
+		if (this == o){
+			return true;
+		} 
+        if (o == null || getClass() != o.getClass()) {
 			return false;
-		}
-
-		if (!(o instanceof Fragment)) {
-			return false;
-		}
-
-		Fragment f = (Fragment) o;
-
-		// Don't unconditionally return false; check that
-		// the relevant instances variables in this and f 
-		// are semantically equal
-		return false;
+		}	
+        Fragment fragment = (Fragment) o;
+        return nucleotides.equals(fragment.nucleotides);
 	}
 
 	/**
@@ -70,7 +72,14 @@ public class Fragment {
 	 * @return the number of nucleotides of overlap
 	 */
 	public int calculateOverlap(Fragment f) {
-		return 0;
+		int overlap = 0;
+        int maxLength = Math.min(this.length(), f.length());
+        for (int i = 1; i <= maxLength; i++) {
+            if (this.nucleotides.substring(this.length() - i).equals(f.nucleotides.substring(0, i))) {
+                overlap = i;
+            }
+        }
+        return overlap;
 	}
 
 
@@ -85,6 +94,8 @@ public class Fragment {
 	 * @return a new fragment based upon merging this fragment with another fragment
 	 */
 	public Fragment mergedWith(Fragment f) {
-		return null;
+		int overlap = this.calculateOverlap(f);
+        return new Fragment(this.nucleotides + f.nucleotides.substring(overlap));
+   
 	}
 }

@@ -17,6 +17,7 @@ public class Assembler {
 	 * @param fragments
 	 */
 	public Assembler(List<Fragment> fragments) {
+		
 	}
 
 	/**
