@@ -98,4 +98,6 @@ public class Fragment {
         return new Fragment(this.nucleotides + f.nucleotides.substring(overlap));
    
 	}
+
+	
 }

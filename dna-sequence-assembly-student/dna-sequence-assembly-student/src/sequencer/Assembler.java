@@ -4,6 +4,7 @@
 
 package sequencer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Assembler {
@@ -15,9 +16,12 @@ public class Assembler {
 	 * modified by the actions of this assembler.
 	 * 
 	 * @param fragments
+	 * 
 	 */
+	private List<Fragment> fragments;
+
 	public Assembler(List<Fragment> fragments) {
-		
+		this.fragments = new ArrayList<>(fragments);
 	}
 
 	/**
@@ -26,7 +30,7 @@ public class Assembler {
 	 * @return the current list of fragments
 	 */
 	public List<Fragment> getFragments() {
-		return null; 
+		return fragments; 
 	}
 
 	/**
@@ -46,12 +50,40 @@ public class Assembler {
 	 * @return true iff an assembly was performed
 	 */
 	public boolean assembleOnce() {
-		return false; 
+		boolean assemblyPerformed = false;
+	
+		for (int i = 0; i < fragments.size(); i++) {
+			for (int j = i + 1; j < fragments.size(); j++) {
+				Fragment one = fragments.get(i);
+				Fragment two = fragments.get(j);
+				int overlap = one.calculateOverlap(two);
+	
+				if (overlap > 0) {
+					Fragment merged = one.mergedWith(two);
+					fragments.remove(one);
+					fragments.remove(two);
+					fragments.add(merged);
+					assemblyPerformed = true;
+					break;
+				}
+			}
+			if (assemblyPerformed) {
+				break;
+			}
+		}
+		return assemblyPerformed;
 	}
+	
+	
 
 	/**
 	 * Repeatedly assembles fragments until no more assembly can occur.
 	 */
 	public void assembleAll() {
+		boolean assemblyPerformed = true;
+
+		while (assemblyPerformed) {
+			assemblyPerformed = assembleOnce();
+		}
 	}
 }
