@@ -18,7 +18,8 @@ public class Assembler {
 	 * @param fragments
 	 * 
 	 */
-	private List<Fragment> fragments;
+	private ArrayList<Fragment> fragments;
+
 
 	public Assembler(List<Fragment> fragments) {
 		this.fragments = new ArrayList<>(fragments);
@@ -30,7 +31,7 @@ public class Assembler {
 	 * @return the current list of fragments
 	 */
 	public List<Fragment> getFragments() {
-		return fragments; 
+		return fragments;
 	}
 
 	/**
@@ -49,32 +50,72 @@ public class Assembler {
 	 * 
 	 * @return true iff an assembly was performed
 	 */
-	public boolean assembleOnce() {
-		boolean assemblyPerformed = false;
+	// public boolean assembleOnce() {
+	// 	boolean assemblyPerformed = false;
+
+	// 	for (int i = 0; i < fragments.size(); i++) {
+	// 		for (int j = i + 1; j < fragments.size(); j++) {
+	// 			Fragment one = fragments.get(i);
+	// 			Fragment two = fragments.get(j);
+	// 			int overlap = one.calculateOverlap(two);
 	
+	// 			if (overlap > 0) {
+	// 				Fragment merged = one.mergedWith(two);
+	// 				fragments.remove(one);
+	// 				fragments.remove(two);
+	// 				fragments.add(merged);
+	// 				assemblyPerformed = true;
+	// 				break;
+	// 			}
+	// 		}
+	// 		if (assemblyPerformed) {
+	// 			break;
+	// 		}
+	// 	}
+	// 	return assemblyPerformed;
+	// }
+	
+
+	public boolean assembleOnce() {
+		int[] assembly = new int[3];
+
+		assembly[2] = Integer.MAX_VALUE;
+
 		for (int i = 0; i < fragments.size(); i++) {
 			for (int j = i + 1; j < fragments.size(); j++) {
-				Fragment one = fragments.get(i);
-				Fragment two = fragments.get(j);
-				int overlap = one.calculateOverlap(two);
-	
-				if (overlap > 0) {
-					Fragment merged = one.mergedWith(two);
-					fragments.remove(one);
-					fragments.remove(two);
-					fragments.add(merged);
-					assemblyPerformed = true;
-					break;
+				int one = this.fragments.get(i).calculateOverlap(this.fragments.get(j));
+				int two = this.fragments.get(j).calculateOverlap(this.fragments.get(i));
+
+				if (one > assembly[2]) {
+					assembly[0] = i;
+					assembly[1] = j;
+					assembly[2] = one;
+				}
+
+				if (two > assembly[2]) {
+					assembly[0] = j;
+					assembly[1] = i;
+					assembly[2] = two;
 				}
 			}
-			if (assemblyPerformed) {
-				break;
-			}
 		}
-		return assemblyPerformed;
+
+		if (assembly[2] >= 1){
+			this.fragments.add(this.fragments.get(assembly[0]).mergedWith(this.fragments.get(assembly[1]) ) );
+
+			if (assembly[0] < assembly[1]){
+				this.fragments.remove(this.fragments.get(assembly[0]));
+				this.fragments.remove(this.fragments.get(assembly[1] -1));
+
+			}
+			else{
+				this.fragments.remove(this.fragments.get(assembly[1]));
+				this.fragments.remove(this.fragments.get(assembly[0] -1 ));
+			}
+			return true;
+		}
+		return false;
 	}
-	
-	
 
 	/**
 	 * Repeatedly assembles fragments until no more assembly can occur.

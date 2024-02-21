@@ -123,6 +123,7 @@ public class AssemblerTest {
 				new Fragment("CCCGTTTA"), new Fragment("TTTAGCCC")));
 		Assembler a = new Assembler(l);
 		a.assembleOnce();
+		
 		assertTrue(a.getFragments().contains(new Fragment("GGGAAACGGG")));
 	}
 
