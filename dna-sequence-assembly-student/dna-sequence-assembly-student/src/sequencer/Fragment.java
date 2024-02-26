@@ -72,14 +72,24 @@ public class Fragment {
 	 * @return the number of nucleotides of overlap
 	 */
 	public int calculateOverlap(Fragment f) {
-		int overlap = 0;
-        int maxLength = Math.min(this.length(), f.length());
-        for (int i = 1; i <= maxLength; i++) {
-            if (this.nucleotides.substring(this.length() - i).equals(f.nucleotides.substring(0, i))) {
-                overlap = i;
-            }
-        }
-        return overlap;
+		// int overlap = 0;
+        // int maxLength = Math.min(this.length(), f.length());
+        // for (int i = 1; i <= maxLength; i++) {
+        //     if (this.nucleotides.substring(this.length() - i).equals(f.nucleotides.substring(0, i))) {
+        //         overlap = i;
+        //     }
+        // }
+        // return overlap;
+		for (int i= Math.min(this.length(), f.toString().length()); i>=1; i--){
+			if(hasOverlap(f,i)){
+				return i;
+			}
+		}
+		return 0;
+	}
+
+	public boolean hasOverlap(Fragment f, int overlapLength){
+		return this.nucleotides.substring(this.length() - overlapLength).equals(f.toString().substring(0, overlapLength));
 	}
 
 
@@ -94,8 +104,8 @@ public class Fragment {
 	 * @return a new fragment based upon merging this fragment with another fragment
 	 */
 	public Fragment mergedWith(Fragment f) {
-		int overlap = this.calculateOverlap(f);
-        return new Fragment(this.nucleotides + f.nucleotides.substring(overlap));
+		// int overlap = this.calculateOverlap(f);
+        return new Fragment(this.nucleotides + f.nucleotides.substring(this.calculateOverlap(f)));
    
 	}
 
