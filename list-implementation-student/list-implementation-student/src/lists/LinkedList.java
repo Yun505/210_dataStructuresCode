@@ -34,6 +34,14 @@ public class LinkedList<E> implements List<E> {
         if (size != other.size())
             return false;
         // TODO before returning true, make sure each element of the lists are equal!
+        for(int i = 0 ; i < size; i++){
+            if ((this.get(i) == null && other.get(i) != null) || (this.get(i) != null && other.get(i) == null)){
+                return false;
+            }
+            if(!(this.get(i).equals(other.get(i)))){
+                return false;
+            }
+        }
         return true;
     }
 
