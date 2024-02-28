@@ -64,13 +64,13 @@ public class LinkedList<E> implements List<E> {
 
     @Override
 public void add(E e) {
-    Node<E> a = new Node<>(e);
+    Node<E> addition = new Node<>(e);
     if (head == null) {
-        head = a;
-        tail = a; 
+        head = addition;
+        tail = addition; 
     } else {
-        tail.next = a;
-        tail = a;
+        tail.next = addition;
+        tail = addition;
     }
     size++;
 }
@@ -85,17 +85,17 @@ public void add(int index, E e) throws IndexOutOfBoundsException {
         return; //basically checks if 8 (size) and i add it at 8 thing there's still 8 elements 
     }
 
-    Node<E> a = new Node<>(e);
+    Node<E> addition = new Node<>(e);
     if (index == 0) {
-        a.next = head;
-        head = a;
+        addition.next = head;
+        head = addition;
     } else {
         Node<E> currentNode = head;
         for (int i = 0; i < index - 1; i++) {
             currentNode = currentNode.next;
         }
-        a.next = currentNode.next;
-        currentNode.next = a;
+        addition.next = currentNode.next;
+        currentNode.next = addition;
     }
     size++;
 }
@@ -134,9 +134,9 @@ public void add(int index, E e) throws IndexOutOfBoundsException {
         for (int i = 0; i < index; i++) {
             currentNode = currentNode.next;
         }
-        E a = currentNode.data;
+        E oldVal = currentNode.data;
         currentNode.data = e;
-        return a;
+        return oldVal;
     }
 
     @Override
