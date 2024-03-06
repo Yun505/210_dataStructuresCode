@@ -39,45 +39,94 @@ public class ArrayList<E> implements List<E> {
         if (size != other.size())
             return false;
         // TODO before returning true, make sure each element of the lists are equal!
+        for(int i = 0 ; i < size; i++){
+            if ((this.get(i) == null && other.get(i) != null) || (this.get(i) != null && other.get(i) == null)){
+                return false;
+            }
+            if(!(this.get(i).equals(other.get(i)))){
+                return false;
+            }
+        }
         return true;
     }
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
     public E get(int index) throws IndexOutOfBoundsException {
-        return null;
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
+        return array[index];
     }
 
 
     @Override
     public void add(E e) {
+        add(size, e);
     }
 
     @Override
     public void add(int index, E e) throws IndexOutOfBoundsException {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException();
+        }
+        if (size == array.length) {
+            resizeArray();
+        }
+        for (int i = size; i > index; i--) {
+            array[i] = array[i - 1];
+        }
+        array[index] = e;
+        size++;
     }
 
     @Override
     public E remove(int index) throws IndexOutOfBoundsException {
-        return null;
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
+        E removedElement = array[index];
+        for (int i = index; i < size - 1; i++) {
+            array[i] = array[i + 1];
+        }
+        size--;
+        return removedElement;
     }
 
     @Override
     public E set(int index, E e) throws IndexOutOfBoundsException {
-        return null;
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
+        E replacedElement = array[index];
+        array[index] = e;
+        return replacedElement;
     }
 
     @Override
     public int indexOf(E e) {
+        for (int i = 0; i < size; i++) {
+            if (array[i].equals(e)) {
+                return i;
+            }
+        }
         return -1;
     }
 
     @Override
     public Iterator<E> iterator() {        
-        return null;
+        return new ArrayListIterator();
+    }
+
+    private void resizeArray() {
+        E[] newArray = (E[]) new Object[array.length * 2];
+        for (int i = 0; i < array.length; i++) {
+            newArray[i] = array[i];
+        }
+        array = newArray;
     }
 }
