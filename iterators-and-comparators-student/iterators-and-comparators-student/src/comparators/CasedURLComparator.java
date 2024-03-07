@@ -20,7 +20,14 @@ public class CasedURLComparator implements Comparator<WebPageRecord> {
 
     @Override
     public int compare(WebPageRecord x, WebPageRecord y) {
-        return 0;
+        String urlX = x.URL;
+        String urlY = y.URL;
+
+        if (ignoreCase) {
+            return urlX.compareToIgnoreCase(urlY);
+        } else {
+            return urlX.compareTo(urlY);
+        }
     }
 
 }

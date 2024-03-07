@@ -18,6 +18,22 @@ import java.util.Comparator;
 public class LargestPageComparator implements Comparator<WebPageRecord> {
     @Override
     public int compare(WebPageRecord x, WebPageRecord y) {
-        return 0;
+        String urlX = x.URL;
+        String urlY = y.URL;
+        
+        int lenComparison = Integer.compare(y.length, x.length);
+        if (lenComparison != 0) {
+            return lenComparison;
+        }
+
+        // if equal
+        int first_lineComp = y.firstLine.compareTo(x.firstLine);
+        if (first_lineComp != 0){
+            return first_lineComp;
+        }
+
+
+        return urlX.compareTo(urlY);
+        
     }
 }

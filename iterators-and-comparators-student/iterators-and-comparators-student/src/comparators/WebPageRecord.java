@@ -72,6 +72,13 @@ public class WebPageRecord implements Comparable<WebPageRecord> {
      */
     @Override
     public int compareTo(WebPageRecord w) {
-        return 0;
+        int urlComparison = this.URL.compareTo(w.URL);
+    
+    // If URLs are equal, break ties using lastRetrieved value's natural order
+    if (urlComparison == 0) {
+        return this.lastRetrieved.compareTo(w.lastRetrieved);
+    }
+    
+    return urlComparison;
     }
 }

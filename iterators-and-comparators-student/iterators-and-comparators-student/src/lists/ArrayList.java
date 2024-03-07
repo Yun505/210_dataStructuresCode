@@ -119,7 +119,7 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public Iterator<E> iterator() {        
-        return new ArrayListIterator();
+        return new ArrayListIterator<>(this);
     }
 
     private void resizeArray() {
@@ -129,4 +129,7 @@ public class ArrayList<E> implements List<E> {
         }
         array = newArray;
     }
+
+
+
 }
