@@ -24,7 +24,16 @@ public class RecursionExercises {
      * @return
      */
     static int sumOfDigitsIterative(int x) {
-        return 0;
+        x = Math.abs(x); //ignore negatives
+
+        String strX = Integer.toString(x);
+
+        int sum = 0; 
+
+        for(int i = 0; i < strX.length(); i++){
+            sum+=Character.getNumericValue(strX.charAt(i));
+        }
+        return sum;
     }
 
     /**
@@ -36,7 +45,12 @@ public class RecursionExercises {
      * @return
      */
     static int sumOfDigitsRecursive(int x) {
-        return 0;
+        x = Math.abs(x);
+
+        if ( x < 10){
+            return x;
+        }
+        return x%10 + sumOfDigitsIterative( x/10);
     }
 
     /**
@@ -49,7 +63,10 @@ public class RecursionExercises {
      * @return the size (length) of the linked list, starting from node
      */
     static <E> int size(Node<E> node) {
-        return 0;
+        if(node == null){
+            return 0;
+        }
+        return 1 + size(node.next);
 
     }
 
@@ -64,6 +81,12 @@ public class RecursionExercises {
      * @return the i-th node of the list
      */
     static <E> Node<E> getNode(Node<E> node, int i) {
-        return null;
+        if(i < 0 || node == null){
+            return null;
+        }
+        if(i == 0){
+            return node;
+        }
+        return getNode(node.next, i-1);
     }
 }
