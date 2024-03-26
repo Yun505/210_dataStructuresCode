@@ -150,4 +150,87 @@ public void add(int index, E e) throws IndexOutOfBoundsException {
         }
         return -1;
     }
+
+    public LinkedList<E> slice(int i, int j){
+        LinkedList<E> new_link = new LinkedList<E>(); 
+        if(i >= size){
+            return new_link; 
+        }
+        for(int k = i; k < size; k++){
+            if (k < j){
+                new_link.add(list.get(i));
+            }
+        }
+        return new_link; 
+    }
+
+    public LinkedList<E> repeat(E element, int count){
+        LinkedList new_link = new LinkedList<E>();
+        for(int i = 0; i < count; i++){
+            new_link.add(element);
+        }
+        return new_link;
+    }
+
+    public LinkedList<E> range(int start, int stop, int step){
+
+    }
+
+    public Node<E> takeNth(int n) {
+        Node<E> current = head;
+        LinkedList<E> return_new = new LinkedList<E>;
+
+        for (int i = 0; i < size; i ++){
+            if(n == 0){
+                return return_new.add(list.get(i));
+            }
+            if((i+1)%n == 0 && n!=0){
+                return_new.add(list.get(i)); 
+            }
+        }
+        return return_new; 
+    }
+
+    public LinkedList<E> flatten(LinkedList<LinkedList<E>> a){
+        if a.head == null:
+            return null;
+        current = head;
+        LINKED LIST new_return
+        curr_list = a.head;
+        else:
+            for(int i = 0; i < a.size; i ++){
+                curr_element = curr_list.head;
+                for(int j= 0; j < curr_list.head;  j++){
+                    if(e.get(i).get(j) != null){
+                        new_return.add(e.get(i).get(j)); 
+                    }
+                }
+            }
+            return new_return
+    }
+
+    
+
+    public LinkedList<E> partition(LinkedList<E> a, int n){
+        if (n < size){
+            throw error 
+        }
+        NEW LINKED LIST A
+        
+        int i = 0; 
+        while (i < size):
+        NEW LINKED LIST ADDITION; 
+
+            for (int j= i ; j <= i+n && j < size ; j ++){
+                addition.add(node.get(i);  
+            }
+            a.data = addition;
+            i+= n;
+            a = a.next
+            
+         return A;    
+        }
+    }
+
+    
 }
