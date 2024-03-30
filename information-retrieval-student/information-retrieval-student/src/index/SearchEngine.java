@@ -4,9 +4,14 @@
 
 package index;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import comparators.TfIdfComparator;
@@ -35,7 +40,10 @@ import documents.DocumentId;
  *
  */
 public class SearchEngine {
-	
+	private Map<DocumentId, List<String>> documentIndex;
+    private Map<String, Set<DocumentId>> invertedIndex;
+    private Map<String, Integer> documentFrequency;
+    private int totalDocuments;
 	/**
 	 * Inserts a document into the search engine for later analysis and retrieval.
 	 * 
@@ -49,7 +57,33 @@ public class SearchEngine {
 	 * @param reader
 	 * @throws IOException iff the reader throws an exception 
 	 */
+	  public SearchEngine() {
+        documentIndex = new HashMap<>();
+        invertedIndex = new HashMap<>();
+        documentFrequency = new HashMap<>();
+        totalDocuments = 0;
+    }
+    
 	public void addDocument(DocumentId documentId, Reader reader) throws IOException {
+		if (documentIndex.containsKey(documentId)) {
+            return;
+        }
+        
+        try (BufferedReader br = new BufferedReader(reader)) {
+            String line;
+            List<String> terms = new ArrayList<>();
+            while ((line = br.readLine()) != null) {
+                String[] lineTerms = line.trim().toLowerCase().split("\\W+");
+
+                for (String term : lineTerms) {
+                    terms.add(term);
+                    documentFrequency.put(term, documentFrequency.getOrDefault(term, 0) + 1);
+                    invertedIndex.computeIfAbsent(term, k -> new HashSet<>()).add(documentId);
+                }
+            }
+            documentIndex.put(documentId, terms);
+            totalDocuments++;
+        }
 	}
 	
 	/**
@@ -59,7 +93,7 @@ public class SearchEngine {
 	 * @return the set of DocumentIds that contain a given term
 	 */
 	public Set<DocumentId> indexLookup(String term) {
-		return null;
+		return invertedIndex.getOrDefault(term.toLowerCase(), new HashSet<>());
 	}
 	
 	/**
@@ -74,7 +108,17 @@ public class SearchEngine {
 	 * @throws IllegalArgumentException if the documentId has not been added to the engine
 	 */
 	public int termFrequency(DocumentId documentId, String term) throws IllegalArgumentException {
-		return 0;
+		List<String> terms = documentIndex.get(documentId);
+        if (terms == null) {
+            throw new IllegalArgumentException("Document not found");
+        }
+        int frequency = 0;
+        for (String t : terms) {
+            if (t.equalsIgnoreCase(term)) {
+                frequency++;
+            }
+        }
+        return frequency;
 	}
 	
 	/**
@@ -88,7 +132,8 @@ public class SearchEngine {
 	 * @return the inverse document frequency of term 
 	 */
 	public double inverseDocumentFrequency(String term) {
-		return 0.0;
+		int documentsWithTerm = invertedIndex.getOrDefault(term.toLowerCase(), new HashSet<>()).size();
+        return Math.log((1 + (double) totalDocuments) / (1 + documentsWithTerm));
 	}
 	
 	/**
@@ -102,7 +147,9 @@ public class SearchEngine {
 	 * @throws IllegalArgumentException if the documentId has not been added to the engine
 	 */
 	public double tfIdf(DocumentId documentId, String term) throws IllegalArgumentException {
-		return 0.0;
+		int tf = termFrequency(documentId, term);
+        double idf = inverseDocumentFrequency(term);
+        return tf * idf;
 	}
 	
 	/**
@@ -116,6 +163,13 @@ public class SearchEngine {
 	 * @return a list of documents sorted in descending order by tfidf
 	 */
 	public List<DocumentId> relevanceLookup(String term) {
-		return null;
+		List<DocumentId> relevantDocuments = new ArrayList<>();
+        Set<DocumentId> documents = indexLookup(term);
+        for (DocumentId documentId : documents) {
+            relevantDocuments.add(documentId);
+			System.out.println(documentId + " " + documentFrequency.get(documentId) + "\n");
+        }
+        relevantDocuments.sort(new TfIdfComparator(this, term));
+		return relevantDocuments;
 	}
 }
