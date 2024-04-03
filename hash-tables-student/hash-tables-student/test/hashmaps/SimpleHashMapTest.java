@@ -99,11 +99,14 @@ public class SimpleHashMapTest {
         final int BOUND = 100;
         Random random = new Random(0);
 
+        int  t= 0;
+
         HashMap<Integer, Integer> hm = new HashMap<>();
         SimpleHashMap<Integer, Integer> m = new SimpleHashMap<>();
 
         for (int i = 0; i < ACTIONS; i++) {
             double d = random.nextDouble();
+            
             if (d < 0.35) {
                 // put
                 int k = random.nextInt(BOUND);
@@ -116,11 +119,15 @@ public class SimpleHashMapTest {
                 // remove
                 int k = random.nextInt(BOUND);
                 assertEquals(hm.remove(Integer.valueOf(k)), m.remove(Integer.valueOf(k)));
-            } else if (d < 0.85) {
+            } 
+            else if (d < 0.85) {
                 // get
                 int k = random.nextInt(BOUND);
+                System.out.println(t++);
+                System.out.println(hm.get(k));
                 assertEquals(hm.get(k), m.get(k));
-            } else {
+            } 
+            else {
                 // getOrDefault
                 int k = random.nextInt(BOUND);
                 assertEquals(hm.getOrDefault(k, BOUND), m.getOrDefault(k, BOUND));

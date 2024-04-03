@@ -128,29 +128,30 @@ public class ChainingHashTable<E> implements HashTable<E> {
 
     private class HashTableIterator implements Iterator<E> {
         private int currentIndex = 0;
-        private Iterator<E> currentIterator = null;
+        private int ll_index = 0;
 
         @Override
         public boolean hasNext() {
-            while (currentIndex < capacity) {
-                if (currentIterator == null || !currentIterator.hasNext()) {
-                    currentIterator = table[currentIndex].iterator();
-                    currentIndex++;
-                }
-                if (currentIterator.hasNext()) {
+            while (currentIndex < table.length) {
+                if (table[currentIndex].isEmpty()) currentIndex++;
+                else if (ll_index < table[currentIndex].size()) {
                     return true;
                 }
-                
+
+                else {
+                    ll_index = 0;
+                    currentIndex++;
+                }
             }
             return false;
         }
 
         @Override
         public E next() {
-            if (!hasNext()) {
+            if (!hasNext() && currentIndex >= capacity ) {
                 throw new NoSuchElementException();
             }
-            return currentIterator.next();
+            return table[currentIndex].get(ll_index++);
         }
     }
 }
