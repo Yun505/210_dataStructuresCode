@@ -3,13 +3,16 @@
  */
 package trees;
 
-
 /**
- * A (partial) implementation of AVL tree. You'll need to complete the rotations to make
- * insertion work. This project doesn't require you to implement remove(), but you're welcome
- * to do so if you want -- it requires a slight modification to `insertionCheck` as written.
+ * A (partial) implementation of AVL tree. You'll need to complete the rotations
+ * to make
+ * insertion work. This project doesn't require you to implement remove(), but
+ * you're welcome
+ * to do so if you want -- it requires a slight modification to `insertionCheck`
+ * as written.
  * 
- * If you're feeling like challenging yourself, reimplement the add-and-rotation-fix algorithm
+ * If you're feeling like challenging yourself, reimplement the
+ * add-and-rotation-fix algorithm
  * the "traditional" way -- recursively.
  */
 public class AVLTree<E extends Comparable<E>> {
@@ -18,6 +21,7 @@ public class AVLTree<E extends Comparable<E>> {
 
     /**
      * Return the size of (number of elements stored in) the tree.
+     * 
      * @return the size of the tree
      */
     public int size() {
@@ -28,6 +32,7 @@ public class AVLTree<E extends Comparable<E>> {
      * Add e to the tree.
      * 
      * e is overwritten if it's already in the tree, but no duplication occurs.
+     * 
      * @param e
      */
     public void add(E e) {
@@ -41,13 +46,14 @@ public class AVLTree<E extends Comparable<E>> {
 
     /**
      * The recursive helper method for add(E e).
+     * 
      * @param e
      * @param node
      */
     private void add(E e, Node<E> node) {
         if (e.equals(node.data)) {
             node.data = e;
-        }  else if (e.compareTo(node.data) < 0) {
+        } else if (e.compareTo(node.data) < 0) {
             if (node.left == null) {
                 node.left = new Node<>(e, node);
                 size++;
@@ -66,6 +72,8 @@ public class AVLTree<E extends Comparable<E>> {
                 add(e, node.right);
             }
         }
+
+        
     }
 
     /**
@@ -124,9 +132,11 @@ public class AVLTree<E extends Comparable<E>> {
 
     /**
      * Perform an LL rotation around n.
+     * 
      * @param n
      */
     private void rotateLL(Node<E> n) {
+       
         Node<E> A, B, T1, T2, T3, p; // p is B's parent ; note we never use T1 or T3!
 
         B = n;
@@ -162,27 +172,117 @@ public class AVLTree<E extends Comparable<E>> {
 
     /**
      * Perform an RR rotation around n.
+     * 
      * @param n
      */
     private void rotateRR(Node<E> n) {
+        
+        Node<E> A, B, T1, T2, T3, p; // p is B's parent ; note we never use T1 or T3!
+
+       A = n;
+       B = A.right;
+       T1 = A.left;
+       T2 = B.left;
+       T3 = B.right; 
+       p = A.parent;
+
+       if(A == root){
+        A.parent = null;
+        root = B;
+       }
+       else{
+        if (p.left == A) {
+            p.left = B;
+        } else {
+            p.right = B;
+        }
+        B.parent = p;
+       }
+       B.left = A;
+       A.right = T2; 
+
     }
 
     /**
      * Perform an LR rotation around n.
+     * 
      * @param n
      */
     private void rotateLR(Node<E> n) {
+        
+        Node<E> A,B, C, T1, T2, T3, T4, p;
+        A = n;
+        p = A.parent;
+        B = A.left;
+        T4 = A.right; 
+        C = B.right;
+        T1 = B.left;
+        T2 = C.left;
+        T3 = C.right; 
+
+        if (A == root){
+            C.parent = null;
+            root = C;
+            A.parent =C;
+        }
+        else{
+            if (p.left == A){
+                p.left = C; 
+            }
+            else{
+                p.right = C;
+            }
+        }
+        C.right = A;
+        A.left = T3;
+        C.left = B;
+        B.right =T2; 
+
     }
 
     /**
      * Perform an RL rotation around n.
+     * 
      * @param n
      */
     private void rotateRL(Node<E> n) {
-    }
+        
+        Node<E> A,B, C, T1, T2, T3, T4, p;
+        A = n;
+        p = A.parent;
+        B = A.right;
+        T1 = A.left; 
+        C = B.left; 
+        T2 = C.left;
+        T3 = C.right;
+        T4 = B.right;
+        TreePrinter.print(C);
+        TreePrinter.print(A);
+        TreePrinter.print(B);
+        if(A == root){
+            C.parent = null;
+            root = C;
+            A.parent = C;
+        }
+        else{
+            if(p.left == A){
+                p.left = C;
+            }
+            else{
+                p.right = C;
+            }
+        }
+        C.left = A;
+        C.right = B;
+        A.left = T1;
+        A.right = T2;
+        B.left = T3;
+        B.right = T4;
+    }   
 
     /**
      * Return true iff the tree contains the value e.
+     * 
      * @param e
      * @return true iff the tree contains the value e
      */
@@ -197,11 +297,11 @@ public class AVLTree<E extends Comparable<E>> {
             return n;
         } else if (e.compareTo(n.data) < 0) { // left
             return find(e, n.left);
-        } else {  // right
+        } else { // right
             return find(e, n.right);
         }
     }
-    
+
     private Node<E> find(E e) {
         return find(e, root);
     }

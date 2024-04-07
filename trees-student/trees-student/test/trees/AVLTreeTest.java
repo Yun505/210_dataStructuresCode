@@ -110,24 +110,24 @@ import org.junit.rules.Timeout;
         assertTrue(TreeUtilities.isAVLTree(t.root));
         t.add(18);
         assertTrue(TreeUtilities.isAVLTree(t.root));
-
+        
         assertTrue(TreeUtilities.equalSubtrees(B, t.root));
     }
 
-    @Test
-    public void testAVLWarning() throws Exception {        
-        fail("This test is intended to fail. Read the comment and then comment out this test.");
-        // We are not providing you with exhaustive tests for your AVL tree implementation,
-        // just the simple ones above.
-        // The next test (testAVL100Randomized) creates 100 random trees and checks them
-        // using isAVLTree. On your computer, this might erroneously pass if your isAVLTree()
-        // implementation is flawed! On Gradescope, we will use our own implementation of
-        // isAVLTree() when running testAVL100Randomized().
-        // So, if testAVL100Randomized passes on your computer but not Gradescope, 
-        // *you need to figure out which of your rotations is broken* -- start by writing
-        // more robust test cases where the various subtrees (T1, etc.) are nodes with
-        // parent pointers, as the simple tests above don't check those cases.
-    }
+    // @Test
+    // public void testAVLWarning() throws Exception {        
+    //     fail("This test is intended to fail. Read the comment and then comment out this test.");
+    //     // We are not providing you with exhaustive tests for your AVL tree implementation,
+    //     // just the simple ones above.
+    //     // The next test (testAVL100Randomized) creates 100 random trees and checks them
+    //     // using isAVLTree. On your computer, this might erroneously pass if your isAVLTree()
+    //     // implementation is flawed! On Gradescope, we will use our own implementation of
+    //     // isAVLTree() when running testAVL100Randomized().
+    //     // So, if testAVL100Randomized passes on your computer but not Gradescope, 
+    //     // *you need to figure out which of your rotations is broken* -- start by writing
+    //     // more robust test cases where the various subtrees (T1, etc.) are nodes with
+    //     // parent pointers, as the simple tests above don't check those cases.
+    // }
 
     @Test
     public void testAVL100Randomized() throws Exception {
