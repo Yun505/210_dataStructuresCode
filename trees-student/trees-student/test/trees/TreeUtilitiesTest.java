@@ -322,14 +322,14 @@ public class TreeUtilitiesTest {
         assertFalse(TreeUtilities.isBST(m));
     }
 
-    @Test
-    public void testIsBSTWarning() throws Exception {        
-        fail("This test is intended to fail. Read the comment and then comment out this test.");
-        // We are not providing you with exhaustive tests for your isBST() code.
-        // Nor do you *have to* test it. But if you run into trouble with your AVL tree
-        // implementation, it can be helpful to be able to automatically check the tree
-        // after a rotation to see if it's still a binary tree.
-    }
+    // @Test
+    // public void testIsBSTWarning() throws Exception {        
+    //     fail("This test is intended to fail. Read the comment and then comment out this test.");
+    //     // We are not providing you with exhaustive tests for your isBST() code.
+    //     // Nor do you *have to* test it. But if you run into trouble with your AVL tree
+    //     // implementation, it can be helpful to be able to automatically check the tree
+    //     // after a rotation to see if it's still a binary tree.
+    // }
 
     @Test
     public void testisAVLEmpty() throws Exception {
@@ -359,12 +359,12 @@ public class TreeUtilitiesTest {
         assertFalse(TreeUtilities.isAVLTree(o));
     }
 
-    @Test
-    public void testIsAVLTreeWarning() throws Exception {        
-        fail("This test is intended to fail. Read the comment and then comment out this test.");
-        // We are not providing you with exhaustive tests for your isAVLTree code.
-        // Nor do you *have to* test it. But if you run into trouble with your AVL tree
-        // implementation, it can be helpful to be able to automatically check the tree
-        // after a rotation to see if it's still an AVL tree.
-    }
+    // @Test
+    // public void testIsAVLTreeWarning() throws Exception {        
+    //     fail("This test is intended to fail. Read the comment and then comment out this test.");
+    //     // We are not providing you with exhaustive tests for your isAVLTree code.
+    //     // Nor do you *have to* test it. But if you run into trouble with your AVL tree
+    //     // implementation, it can be helpful to be able to automatically check the tree
+    //     // after a rotation to see if it's still an AVL tree.
+    // }
 }
