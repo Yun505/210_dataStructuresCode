@@ -187,8 +187,9 @@ public class AVLTree<E extends Comparable<E>> {
        p = A.parent;
 
        if(A == root){
-        A.parent = null;
+        B.parent = null;
         root = B;
+        A.parent = B;
        }
        else{
         if (p.left == A) {
@@ -197,9 +198,14 @@ public class AVLTree<E extends Comparable<E>> {
             p.right = B;
         }
         B.parent = p;
+        A.parent = B;
        }
        B.left = A;
        A.right = T2; 
+
+       if (T2 != null) {
+        T2.parent = A;
+       }
 
     }
 
@@ -211,32 +217,35 @@ public class AVLTree<E extends Comparable<E>> {
     private void rotateLR(Node<E> n) {
         
         Node<E> A,B, C, T1, T2, T3, T4, p;
-        A = n;
-        p = A.parent;
-        B = A.left;
-        T4 = A.right; 
-        C = B.right;
-        T1 = B.left;
-        T2 = C.left;
-        T3 = C.right; 
+        // A = n;
+        // p = A.parent;
+        // B = A.left;
+        // T4 = A.right; 
+        // C = B.right;
+        // T1 = B.left;
+        // T2 = C.left;
+        // T3 = C.right; 
 
-        if (A == root){
-            C.parent = null;
-            root = C;
-            A.parent =C;
-        }
-        else{
-            if (p.left == A){
-                p.left = C; 
-            }
-            else{
-                p.right = C;
-            }
-        }
-        C.right = A;
-        A.left = T3;
-        C.left = B;
-        B.right =T2; 
+        // if (A == root){
+        //     C.parent = null;
+        //     root = C;
+        //     A.parent =C;
+        // }
+        // else{
+        //     if (p.left == A){
+        //         p.left = C; 
+        //     }
+        //     else{
+        //         p.right = C;
+        //     }
+        // }
+        // C.right = A;
+        // A.left = T3;
+        // C.left = B;
+        // B.right =T2; 
+
+        rotateRR(n.left);
+        rotateLL(n);
 
     }
 
@@ -248,36 +257,38 @@ public class AVLTree<E extends Comparable<E>> {
     private void rotateRL(Node<E> n) {
         
         Node<E> A,B, C, T1, T2, T3, T4, p;
-        A = n;
-        p = A.parent;
-        B = A.right;
-        T1 = A.left; 
-        C = B.left; 
-        T2 = C.left;
-        T3 = C.right;
-        T4 = B.right;
-        TreePrinter.print(C);
-        TreePrinter.print(A);
-        TreePrinter.print(B);
-        if(A == root){
-            C.parent = null;
-            root = C;
-            A.parent = C;
-        }
-        else{
-            if(p.left == A){
-                p.left = C;
-            }
-            else{
-                p.right = C;
-            }
-        }
-        C.left = A;
-        C.right = B;
-        A.left = T1;
-        A.right = T2;
-        B.left = T3;
-        B.right = T4;
+        // A = n;
+        // p = A.parent;
+        // B = A.right;
+        // T1 = A.left; 
+        // C = B.left; 
+        // T2 = C.left;
+        // T3 = C.right;
+        // T4 = B.right;
+        // TreePrinter.print(C);
+        // TreePrinter.print(A);
+        // TreePrinter.print(B);
+        // if(A == root){
+        //     C.parent = null;
+        //     root = C;
+        //     A.parent = C;
+        // }
+        // else{
+        //     if(p.left == A){
+        //         p.left = C;
+        //     }
+        //     else{
+        //         p.right = C;
+        //     }
+        // }
+        // C.left = A;
+        // C.right = B;
+        // A.left = T1;
+        // A.right = T2;
+        // B.left = T3;
+        // B.right = T4;
+        rotateLL(n.right);
+        rotateRR(n);
     }   
 
     /**

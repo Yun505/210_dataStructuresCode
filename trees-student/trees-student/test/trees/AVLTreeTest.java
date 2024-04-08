@@ -145,6 +145,7 @@ import org.junit.rules.Timeout;
             AVLTree<Integer> a = new AVLTree<>();
             for (Integer i : l) {
                 a.add(i);
+                TreePrinter.print(a.root);
                 assertTrue(TreeUtilities.isAVLTree(a.root));
             }
         }
