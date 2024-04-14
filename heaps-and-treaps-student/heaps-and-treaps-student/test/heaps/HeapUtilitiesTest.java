@@ -137,14 +137,14 @@ public class HeapUtilitiesTest {
         assertArrayEquals(t, a, 0);
     }
 
-    @Test
-    public void testIsHeapWarning() throws Exception {        
-        fail("This test is intended to fail. Read the comment and then comment out this test.");
-        // We are not providing you with exhaustive tests for your isHeap code.
-        // Nor do you *have to* implement it. But your local version of testHeapify100Randomized
-        // won't pass until you do. (The Gradescope test will pass if your heapify code
-        // is correct -- it doesn't use your version of isHeap.)
-    }
+    // @Test
+    // public void testIsHeapWarning() throws Exception {        
+    //     fail("This test is intended to fail. Read the comment and then comment out this test.");
+    //     // We are not providing you with exhaustive tests for your isHeap code.
+    //     // Nor do you *have to* implement it. But your local version of testHeapify100Randomized
+    //     // won't pass until you do. (The Gradescope test will pass if your heapify code
+    //     // is correct -- it doesn't use your version of isHeap.)
+    // }
 
     @Test
     public void testHeapify100Randomized() throws Exception {
