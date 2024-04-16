@@ -17,6 +17,7 @@ public class Treap<E extends Comparable<E>> {
 
     /**
      * Return true iff the tree contains the value e.
+     * 
      * @param e
      * @return true iff the tree contains the value e
      */
@@ -31,39 +32,43 @@ public class Treap<E extends Comparable<E>> {
             return n;
         } else if (e.compareTo(n.data) < 0) { // left
             return find(e, n.left);
-        } else {  // right
+        } else { // right
             return find(e, n.right);
         }
     }
-    
+
     private Node<E> find(E e) {
         return find(e, root);
     }
 
-
     /**
-     * Perform an in-order traversal of the tree rooted at the given node, and return
+     * Perform an in-order traversal of the tree rooted at the given node, and
+     * return
      * a list of the elements in the order they were visited.
+     * 
      * @param node
-     * @return a list of elements from the tree from an in-order traversal starting at node
+     * @return a list of elements from the tree from an in-order traversal starting
+     *         at node
      */
     static <E> List<E> inOrder(Node<E> node) {
-        return new ArrayList<>();
+        List<E> result = new ArrayList<>();
+        inOrderTraversal(node, result);
+        return result;
     }
-    
+
     /**
-     * Returns true iff the tree rooted at n is a Binary Search Tree (based on its data values).
+     * Helper method to perform the in-order traversal recursively.
      * 
-     * It must have no more than two children per node.
-     * 
-     * Each node's data value must be greater than all the values in its left subtree, and smaller
-     * than all the values in its right subtree. (This implies duplicate values are not allowed.)
-     * 
-     * @param n true iff the tree rooted at n is a Binary Search Tree
-     * @return 
+     * @param node   the current node being visited
+     * @param result the list to store the traversal result
      */
-    static <E extends Comparable<E>> boolean isBST(Node<E> n) {
-        return false;
+    private static <E> void inOrderTraversal(Node<E> node, List<E> result) {
+        if (node == null) {
+            return;
+        }
+        inOrderTraversal(node.left, result);
+        result.add(node.data);
+        inOrderTraversal(node.right, result);
     }
 
     /**
@@ -71,14 +76,37 @@ public class Treap<E extends Comparable<E>> {
      * 
      * It must have no more than two children per node.
      * 
-     * Each node's priority value must be greater than or equal to all the values 
+     * Each node's priority value must be greater than or equal to all the values
      * in its children.
      * 
      * @param n true iff the tree rooted at n is a Binary Search Tree
-     * @return 
+     * @return
      */
     static <E extends Comparable<E>> boolean isHeap(Node<E> n) {
-        return false;
+        if (n == null) {
+            return true; // An empty tree is a heap
+        }
+
+        // Check if the node has left and right children
+        if (n.left != null && n.right != null) {
+            // Compare the priority value of the node with its children
+            if (n.priority < n.left.priority || n.priority < n.right.priority) {
+                return false; // The node's priority value is less than one of its children
+            }
+        } else if (n.left != null) {
+            // Compare the priority value of the node with its left child
+            if (n.priority < n.left.priority) {
+                return false; // The node's priority value is less than its left child
+            }
+        } else if (n.right != null) {
+            // Compare the priority value of the node with its right child
+            if (n.priority < n.right.priority) {
+                return false; // The node's priority value is less than its right child
+            }
+        }
+
+        // Recursively check the left and right subtrees
+        return isHeap(n.left) && isHeap(n.right);
     }
 
     /**
@@ -96,83 +124,171 @@ public class Treap<E extends Comparable<E>> {
     }
 
     /**
-     * Add the value e to the treap rooted at the given node, 
+     * Add the value e to the treap rooted at the given node,
      * maintaining the BST and heap properties.
+     * 
      * @param e
      * @param node
      */
     public void add(E e, Node<E> node) {
-        // TODO! the BST add code below maintains the BST property,
-        // but you need to add the code to restore the max-heap property
-        //
-        // I suggest writing a separate method and calling it from here
-        // in the appropriate place(s)
+        addBST(e, node); // Add the new node according to the BST property
+        restoreHeapProperty(find(e)); // Restore the max-heap property
+    }
 
+    /**
+     * Add the value e to the treap rooted at the given node,
+     * maintaining the BST property.
+     * 
+     * @param e    the value to add
+     * @param node the root of the treap where the value should be added
+     */
+    private void addBST(E e, Node<E> node) {
         if (e.equals(node.data)) {
-            node.data = e;
-        }
-        if (e.compareTo(node.data) < 0) {
+            node.data = e; // Update the existing node with the same value
+        } else if (e.compareTo(node.data) < 0) {
             if (node.left == null) {
                 node.left = new Node<>(e, node);
                 size++;
-                return;
             } else {
-                add(e, node.left);
+                addBST(e, node.left); // Recursively add to the left subtree
             }
         } else {
             if (node.right == null) {
                 node.right = new Node<>(e, node);
                 size++;
-                return;
             } else {
-                add(e, node.right);
+                addBST(e, node.right); // Recursively add to the right subtree
             }
         }
     }
 
     /**
+     * Restore the max-heap property of the treap rooted at the given node.
+     * 
+     * @param node the root of the treap where the heap property should be restored
+     */
+    private void restoreHeapProperty(Node<E> node) {
+        if (node == null || node.parent == null) return;
+        while (node != root && node.parent != null &&  node.parent.priority < node.priority) {
+            TreePrinter.print(node.parent);
+            if (node.parent.left == node) {
+                rotateRR(node); // Rotate right if the violated node is a left child
+                
+            } else {
+                rotateLL(node); // Rotate left if the violated node is a right child
+            }
+            TreePrinter.print(node.parent);
+        }
+    }
+    // public void add(E e, Node<E> node) {
+    // // TODO! the BST add code below maintains the BST property,
+    // // but you need to add the code to restore the max-heap property
+    // //
+    // // I suggest writing a separate method and calling it from here
+    // // in the appropriate place(s)
+
+    // if (e.equals(node.data)) {
+    // node.data = e;
+    // }
+    // if (e.compareTo(node.data) < 0) {
+    // if (node.left == null) {
+    // node.left = new Node<>(e, node);
+    // size++;
+    // return;
+    // } else {
+    // add(e, node.left);
+    // }
+    // } else {
+    // if (node.right == null) {
+    // node.right = new Node<>(e, node);
+    // size++;
+    // return;
+    // } else {
+    // add(e, node.right);
+    // }
+    // }
+    // }
+
+    /**
      * Perform an LL rotation around n.
+     * 
      * @param n
      */
     private void rotateLL(Node<E> n) {
-        Node<E> A, B, T1, T2, T3, p; // p is B's parent ; note we never use T1 or T3!
+       Node<E> A = n.parent;
+       if (A == root) {
+        n.parent = null;
+        root = n;
+       }
 
-        B = n;
-        p = B.parent;
-        A = B.left;
-        T1 = A.left;
-        T2 = A.right;
-        T3 = B.right;
-
-        // making A the root of the subtree
-        if (B == root) { // special case: B was the root of the *whole* tree
-            root = A;
-            A.parent = null;
-        } else { // otherwise, B was just a node in the tree, not its root
-            if (p.left == B) {
-                p.left = A;
-            } else {
-                p.right = A;
-            }
-            A.parent = p;
+       else {
+        if (A == A.parent.left) {
+            n.parent = A.parent;
+            A.parent.left = n;
         }
-
-        // now let's make B into A's right subchild
-        A.right = B;
-        B.parent = A;
-
-        // finally, let's move T2 to B's new left subchild
-        B.left = T2;
-        if (T2 != null) {
-            T2.parent = B;
+        else {
+            n.parent = A.parent;
+            A.parent.right = n;
         }
+       }
+       A.parent = n;
+       A.right = n.left;
+       if (n.left != null) {
+        n.left.parent = A;
+       }
+       
+        n.left = A;
     }
 
     /**
      * Perform an RR rotation around n.
+     * 
      * @param n
      */
     private void rotateRR(Node<E> n) {
+        Node<E> A = n.parent;
+       if (A == root) {
+        n.parent = null;
+        root = n;
+        
+       }
+
+       else {
+        if (A == A.parent.left) {
+            n.parent = A.parent;
+            A.parent.left = n;
+        }
+        else {
+            n.parent = A.parent;
+            A.parent.right = n;
+        }
+       }
+       A.parent = n;
+        A.left = n.right;
+
+        if (n.right != null) {
+            n.right.parent = A;
+        }
+        
+        n.right = A;
+    }
+
+    public static boolean isBST(Node<Integer> node) {
+        if (node == null) {
+            return true;
+        }
+
+        boolean ans = true;
+
+        if (node.left != null) {
+            ans = ans && node.left.data.compareTo(node.data) < 0;
+        }
+
+        if (node.right != null) {
+            ans = ans && node.right.data.compareTo(node.data) > 0;
+        }
+
+        return ans && isBST(node.left) && isBST(node.right);
     }
 
     public static void main(String[] args) {
@@ -181,7 +297,7 @@ public class Treap<E extends Comparable<E>> {
         for (int i = 0; i < 15; i++) {
             t.add(i);
             TreePrinter.print(t.root);
-            System.out.println(isBST(t.root) + "/" + isHeap(t.root));
+            // System.out.println(isBST(t.root) + "/" + isHeap(t.root));
         }
     }
 }
