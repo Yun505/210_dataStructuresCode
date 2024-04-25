@@ -22,6 +22,8 @@ public class Node<E> {
     public String toString() {
         return "Node [data=" + data + "]";
     }
+
+    [1, 2,3  ,4,6,5,7,  8,9]
     
 }
 
