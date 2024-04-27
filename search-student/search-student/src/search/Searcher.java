@@ -5,6 +5,12 @@
 package search;
 
 import java.util.List;
+import java.util.Stack;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.LinkedList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * An implementation of a Searcher that performs an iterative search,
@@ -17,13 +23,13 @@ import java.util.List;
  */
 public class Searcher<T> {
 	private final SearchProblem<T> searchProblem;
-	
+
 	/**
 	 * Instantiates a searcher.
 	 * 
 	 * @param searchProblem
-	 *            the search problem for which this searcher will find and
-	 *            validate solutions
+	 *                      the search problem for which this searcher will find and
+	 *                      validate solutions
 	 */
 	public Searcher(SearchProblem<T> searchProblem) {
 		this.searchProblem = searchProblem;
@@ -42,9 +48,39 @@ public class Searcher<T> {
 	 * 
 	 * @return a solution to the problem (or an empty list)
 	 */
-	public List<T> findSolution() {		
-		// TODO
-		return null;
+	public List<T> findSolution() {
+		Stack<T> frontier = new Stack<>();
+		Set<T> expanded = new HashSet<>();
+
+		LinkedList<T> path = new LinkedList<>();
+		Map<T, T> predecessor = new HashMap<>();
+		predecessor.put(searchProblem.getInitialState(), null);
+		frontier.add(searchProblem.getInitialState());
+
+		while (!frontier.isEmpty()) {
+			T current = frontier.pop();
+
+			if (searchProblem.isGoal(current)) {
+				T curr = current;
+				path.add(curr);
+				while (curr != searchProblem.getInitialState()) {
+					path.addFirst(predecessor.get(curr));
+					curr = predecessor.get(curr);
+				}
+
+				return path;
+			} else if (!expanded.contains(current)) {
+				expanded.add(current);
+				for (T next : searchProblem.getSuccessors(current)) {
+					if (!expanded.contains(next)) {
+						frontier.push(next);
+						predecessor.put(next, current);
+					}
+				}
+			}
+
+		}
+		return path;
 	}
 
 	/**
@@ -62,10 +98,20 @@ public class Searcher<T> {
 	 * @param solution
 	 * @return true iff this solution is a valid solution
 	 * @throws NullPointerException
-	 *             if solution is null
+	 *                              if solution is null
 	 */
 	public final boolean isValidSolution(List<T> solution) {
-		// TODO
-		return false;
+		for (int i = 0; i < solution.size() - 1; i++) {
+			if (searchProblem.getSuccessors(solution.get(i)).contains(solution.get(i + 1)) != true) {
+				return false;
+			}
+		}
+		if (solution.get(0).equals(searchProblem.getInitialState()) != true) {
+			return false;
+		}
+		if (searchProblem.isGoal(solution.get(solution.size() - 1)) != true) {
+			return false;
+		}
+		return true;
 	}
 }

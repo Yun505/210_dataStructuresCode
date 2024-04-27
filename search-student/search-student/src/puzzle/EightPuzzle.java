@@ -4,6 +4,7 @@
 
 package puzzle;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -61,27 +62,50 @@ public class EightPuzzle implements SearchProblem<List<Integer>> {
 	 *            the starting values, 0 -- 8
 	 * @throws IllegalArgumentException
 	 *             if startingValues is invalid
+	 * 
+	 * 
 	 */
+	private static final int PUZZLE_SIZE = 9;
+    private static final int PUZZLE_DIMENSION = 3;
+
+	private List<Integer> startingValues;
+
+    private List<Integer> goalState;
+    private int[][] moves = {
+        {1, 3}, {0, 2, 4}, {1, 5}, 
+        {0, 4, 6}, {1, 3, 5, 7}, {2, 4, 8}, 
+        {3, 7}, {4, 6, 8}, {5, 7}}; 
+
 	public EightPuzzle(List<Integer> startingValues) {
+		this.startingValues = startingValues;
+		goalState = Arrays.asList(1,2,3,4,5,6,7,8,0);
 	}
 
 	@Override
 	public List<Integer> getInitialState() {
-		// TODO
-		return null;
+		return this.startingValues;
+		
 	}
 
 	@Override
 	public List<List<Integer>> getSuccessors(List<Integer> currentState) {
-		// TODO
-		return null;
+		List<List<Integer>> successors = new ArrayList<>();
+        int emptySpaceIndex = currentState.indexOf(0);
+
+        for (int move : moves[emptySpaceIndex]) {
+            List<Integer> successor = new ArrayList<>(currentState);
+            successor.set(emptySpaceIndex, currentState.get(move));
+            successor.set(move, 0); // Move the empty space to the swapped position
+            successors.add(successor);
+        }
+
+        return successors;
 	}
 
 
 	@Override
 	public boolean isGoal(List<Integer> state) {
-		// TODO
-		return false;
+		return state.equals(this.goalState);
 	}
 
 	public static void main(String[] args) {
