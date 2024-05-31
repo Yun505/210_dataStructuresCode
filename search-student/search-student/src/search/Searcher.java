@@ -106,6 +106,11 @@ public class Searcher<T> {
 				return false;
 			}
 		}
+
+		if (solution.size() == 0) {
+			return false;
+		}
+		
 		if (solution.get(0).equals(searchProblem.getInitialState()) != true) {
 			return false;
 		}
